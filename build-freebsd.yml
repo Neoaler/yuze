@@ -1,0 +1,37 @@
+name: Build for FreeBSD
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch: # 允许手动点击运行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build in FreeBSD VM
+      uses: vmactions/freebsd-vm@v1
+      with:
+        usesh: true
+        # 如果需要安装依赖（比如 cmake, git），写在 prepare 里
+        prepare: |
+          pkg install -y gmake gcc
+        # 实际的编译命令
+        run: |
+          if [ -f "Makefile" ]; then
+            gmake
+          else
+            gcc -o my_socks5_server *.c
+          fi
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: freebsd-binary
+        path: |
+          ./my_socks5_server
+          # 或者根据你的编译结果填写文件名
