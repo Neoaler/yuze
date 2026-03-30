@@ -129,12 +129,12 @@ build-freebsd:
           ARCH=$(uname -m)
           mv build/yuze build/yuze-FreeBSD-$ARCH
 
-    - name: Upload FreeBSD Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: yuze-FreeBSD-x64-clang
-        path: build/yuze-FreeBSD-*
-        if-no-files-found: error
-        retention-days: 7
+      - name: Upload FreeBSD Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yuze-FreeBSD-x64-clang
+          path: build/yuze-FreeBSD-*
+          if-no-files-found: error
+          retention-days: 7
 
 
